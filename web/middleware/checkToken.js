@@ -1,0 +1,16 @@
+const authService = require('../services/auth.service')
+
+const checkToken = (req, res, next) => {
+  const token = req.header('auth-token')
+  if (!token) {
+    return res.status(401).send({ error: 'Denied Access' })
+  }
+
+  if (authService.validateToken(token)) {
+    next()
+  } else {
+    return res.status(400).send({ error: 'Invalid Token' })
+  };
+}
+
+module.exports = checkToken
