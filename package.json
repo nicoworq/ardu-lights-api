@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "test": "jest --verbose"
+  },
   "dependencies": {
     "aedes": "^0.46.0",
     "bcrypt": "^5.0.1",
@@ -10,9 +13,18 @@
   },
   "devDependencies": {
     "jest": "^28.1.0",
-    "standard": "^17.0.0"
+    "standard": "^17.0.0",
+    "supertest": "^6.2.3"
   },
-  "eslintConfig":{
-    "extends" : ["/node_modules/standard/eslintrc.json"]
+  "eslintConfig": {
+    "extends": [
+      "/node_modules/standard/eslintrc.json"
+    ]
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   }
 }

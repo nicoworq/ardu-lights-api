@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 
 const loginRouter = require('./routes/login.routes')
 const dashboardRouter = require('./routes/dashboard.routes')
+const apiRouter = require('./routes/api.routes')
 const checkToken = require('./middleware/checkToken')
 
 function initWebServer () {
@@ -13,13 +14,15 @@ function initWebServer () {
   app.get('/', (req, res) => res.send('Hello World!'))
 
   app.use('/login', loginRouter)
-  app.use('/dashboard', checkToken, dashboardRouter)
+  app.use('/dashboard', dashboardRouter)
+  app.use('/api', checkToken, apiRouter)
 
   app.use(express.static('public'))
 
-  app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+  app.listen(port, () => console.log('Web server UP and running on port', port))
 }
 
 module.exports = {
-  initWebServer
+  initWebServer,
+  app
 }
