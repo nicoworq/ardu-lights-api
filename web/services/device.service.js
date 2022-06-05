@@ -39,10 +39,10 @@ async function updateDevice (device) {
 async function sendMessage (deviceId, payload) {
   const device = await getDevice(deviceId)
 
-  if (device == null) {
+  if (device === {}) {
     return false
   }
-  console.log(device)
+
   const topic = device.topic
 
   mqttServer.sendMessage(topic, payload)

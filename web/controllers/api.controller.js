@@ -8,11 +8,7 @@ async function getServerStatus (req, res, next) {
 }
 async function getDevices (req, res, next) {
   try {
-    const tokenPayload = await authService.getTokenPayload(req.header('auth-token'))
-
-    // we get devices from the logged in user
-    const devices = await deviceService.getDevices(tokenPayload.id)
-
+    const devices = await _getUserDevices(req)
     res.status(200).send(devices)
   } catch (err) {
     console.log(err.message)
@@ -20,16 +16,30 @@ async function getDevices (req, res, next) {
   }
 }
 
+async function _getUserDevices (req) {
+  const tokenPayload = await authService.getTokenPayload(req.header('auth-token'))
+
+  // we get devices from the logged in user
+  const devices = await deviceService.getDevices(tokenPayload.id)
+
+  return devices
+}
+
 async function sendMessage (req, res, next) {
   try {
     const requestBody = req.body
     const deviceId = requestBody.deviceId
-
     const payload = requestBody.payload
+
+    if (deviceId === undefined || payload === undefined) {
+      throw new Error()
+    }
 
     const messageSent = await deviceService.sendMessage(deviceId, payload)
 
-    res.status(200).send({ messageSent, payload })
+    const devices = await _getUserDevices(req)
+
+    res.status(200).send({ messageSent, payload, devices })
   } catch (err) {
     console.log(err.message)
     res.status(500).send('Server Error')

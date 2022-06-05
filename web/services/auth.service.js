@@ -9,15 +9,16 @@ function generateToken (userId, username) {
   return newToken
 }
 
-function validateToken (token) {
+async function validateToken (token) {
   try {
-    const valid = jwt.verify(token, process.env.TOKEN_SECRET)
+    const valid = await jwt.verify(token, process.env.TOKEN_SECRET)
+
     if (Object.prototype.hasOwnProperty.call(valid, 'name')) {
       return true
     }
     return false
   } catch (err) {
-    console.log(err.message)
+    console.log(err)
     return false
   }
 }
