@@ -1,8 +1,12 @@
+
 const path = require('path')
 
 const authService = require('../services/auth.service')
 const userService = require('../services/user.service')
 
+/**
+ * @deprecated
+ */
 async function get (req, res, next) {
   res.sendFile(path.join(__dirname + '../../views/login.html'))
 }
@@ -14,9 +18,11 @@ async function post (req, res, next) {
     const username = requestBody.username
     const password = requestBody.password
 
-    if (await userService.loginUser(username, password)) {
+    const loggedUser = await userService.loginUser(username, password)
+    if (loggedUser) {
       // we are logged in
-      const newToken = authService.generateToken(1, username)
+      console.log(loggedUser)
+      const newToken = authService.generateToken(loggedUser.id, loggedUser.username)
       res.status(200).send({ logged: true, message: 'Login OK!', jwt: newToken })
     } else {
       // wrong login

@@ -4,7 +4,7 @@ function generateToken (userId, username) {
   const newToken = jwt.sign({
     name: username,
     id: userId
-  }, process.env.TOKEN_SECRET)
+  }, process.env.TOKEN_SECRET, { expiresIn: '7 days' })
 
   return newToken
 }
@@ -22,7 +22,18 @@ function validateToken (token) {
   }
 }
 
+async function getTokenPayload (token) {
+  try {
+    const decoded = jwt.decode(token + 'a')
+    return decoded
+  } catch (err) {
+    console.log(err.message)
+    return false
+  }
+}
+
 module.exports = {
   generateToken,
-  validateToken
+  validateToken,
+  getTokenPayload
 }

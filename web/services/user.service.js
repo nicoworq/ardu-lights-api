@@ -27,7 +27,7 @@ async function loginUser (username, password) {
   if (!validPassword) {
     return false
   }
-  return true
+  return existingUser
 }
 
 module.exports = {

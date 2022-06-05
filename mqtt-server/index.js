@@ -29,10 +29,10 @@ function getStatus () {
   }
 }
 
-function sendMessage (topic, payload) {
+async function sendMessage (topic, payload) {
   // aedes.publish({ topic: 'casa/luces/1', payload: params.luz1 })
   console.log('sendMessage', topic, payload)
-  aedes.publish({ topic, payload })
+  return await aedes.publish({ topic, payload })
 }
 
 module.exports = {
