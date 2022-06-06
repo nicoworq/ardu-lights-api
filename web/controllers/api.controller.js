@@ -35,11 +35,19 @@ async function sendMessage (req, res, next) {
       throw new Error()
     }
 
+    const userDevices = await _getUserDevices(req)
+
+    // is owner?
+    const isOwner = userDevices.find((device) => device.id === deviceId)
+
+    if (isOwner === undefined) {
+      res.status(404).send({ messageSent: false, error: 'Device not found in your devices' })
+      return
+    }
+
     const messageSent = await deviceService.sendMessage(deviceId, payload)
 
-    const devices = await _getUserDevices(req)
-
-    res.status(200).send({ messageSent, payload, devices })
+    res.status(200).send({ messageSent, payload })
   } catch (err) {
     console.log(err.message)
     res.status(500).send('Server Error')
