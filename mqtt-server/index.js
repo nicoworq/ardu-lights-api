@@ -6,7 +6,7 @@ const functions = require('./functions')
 
 async function initServer () {
   await mqttServer.listen(mqttPort, function () {
-    console.log('MQTT server UP and running on port', mqttPort)
+    console.log('MQTT server V2.0 UP and running on port', mqttPort)
   })
 }
 
