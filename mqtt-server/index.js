@@ -31,6 +31,7 @@ aedes.on('clientDisconnect', function (client) {
 })
 
 function onMessage (message, client) {
+  console.log(message.topic)
   switch (message.topic) {
     case '/casa/temperatura':
 
