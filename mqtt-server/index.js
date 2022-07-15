@@ -18,7 +18,7 @@ aedes.on('client', function (client) {
 })
 
 aedes.on('publish', async function (packet, client) {
-  console.log('Client \x1b[31m' + (client ? client.id : 'BROKER_' + aedes.id) + '\x1b[0m has published', packet.payload.toString(), 'on', packet.topic, 'to broker', aedes.id)
+  // console.log('Client \x1b[31m' + (client ? client.id : 'BROKER_' + aedes.id) + '\x1b[0m has published', packet.payload.toString(), 'on', packet.topic, 'to broker', aedes.id)
 
   onMessage(packet, client)
 })
@@ -27,11 +27,10 @@ aedes.on('publish', async function (packet, client) {
 aedes.on('clientDisconnect', function (client) {
   clientsConected--
   clientsConected = clientsConected < 0 ? 0 : clientsConected
-  console.log('Client Disconnected: \x1b[31m' + (client ? client.id : client) + '\x1b[0m', 'to broker', aedes.id)
+  // console.log('Client Disconnected: \x1b[31m' + (client ? client.id : client) + '\x1b[0m', 'to broker', aedes.id)
 })
 
 function onMessage (message, client) {
-  console.log(message.topic)
   switch (message.topic) {
     case '/casa/temperatura':
 
@@ -50,7 +49,6 @@ function getStatus () {
 
 async function sendMessage (topic, payload) {
   // aedes.publish({ topic: 'casa/luces/1', payload: params.luz1 })
-  console.log('sendMessage', topic, payload)
   return await aedes.publish({ topic, payload })
 }
 
