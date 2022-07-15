@@ -80,13 +80,13 @@ let luz2 = 'off'
 const http = require('http')
 
 const webPort = 3000
-const webHost = '198.74.55.112'
-// const webHost = 'localhost'
+//  const webHost = '198.74.55.112'
+const webHost = 'localhost'
 
 const server = http.createServer(function (request, response) {
   // console.dir(request.param)
 
-  if (request.method == 'POST') {
+  if (request.method === 'POST') {
     console.log('POST')
     let body = ''
     request.on('data', function (data) {
