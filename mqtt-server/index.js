@@ -32,7 +32,7 @@ aedes.on('clientDisconnect', function (client) {
 
 setInterval(() => {
   showTemperature()
-}, 60000)
+}, 20000)
 
 function onMessage (message, client) {
   switch (message.topic) {
