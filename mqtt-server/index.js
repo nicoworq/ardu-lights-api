@@ -30,9 +30,9 @@ aedes.on('clientDisconnect', function (client) {
   // console.log('Client Disconnected: \x1b[31m' + (client ? client.id : client) + '\x1b[0m', 'to broker', aedes.id)
 })
 
-setTimeout(() => {
+setInterval(() => {
   showTemperature()
-}, 10000)
+}, 60000)
 
 function onMessage (message, client) {
   switch (message.topic) {
