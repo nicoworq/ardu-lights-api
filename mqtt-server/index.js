@@ -3,6 +3,8 @@ const mqttServer = require('net').createServer(aedes.handle)
 const mqttPort = process.env.MQTT_PORT
 
 const temperatureService = require('../web/services/temperature.service')
+const humidityService = require('../web/services/humidity.service')
+const pressureService = require('../web/services/pressure.service')
 
 async function initServer () {
   await mqttServer.listen(mqttPort, function () {
@@ -37,8 +39,17 @@ setInterval(() => {
 function onMessage (message, client) {
   switch (message.topic) {
     case '/casa/temperatura':
-
       temperatureService.newTemperature(client.id, parseFloat(message.payload.toString()))
+
+      break
+
+    case '/casa/humedad':
+      humidityService.newHumidity(client.id, parseFloat(message.payload.toString()))
+
+      break
+
+    case '/casa/presion':
+      pressureService.newPressure(client.id, parseFloat(message.payload.toString()))
 
       break
   }
