@@ -13,6 +13,13 @@ async function newTemperature (device, value) {
   return await newTemperatureModel.save()
 }
 
+async function getLastTemperature () {
+  const lastTemp = await TemperatureModel.findOne().sort({ field: 'asc', _id: -1 }).limit(1)
+
+  return lastTemp
+}
+
 module.exports = {
-  newTemperature
+  newTemperature,
+  getLastTemperature
 }

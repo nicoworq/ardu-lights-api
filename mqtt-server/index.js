@@ -2,7 +2,7 @@ const aedes = require('aedes')()
 const mqttServer = require('net').createServer(aedes.handle)
 const mqttPort = process.env.MQTT_PORT
 
-const functions = require('./functions')
+const temperatureService = require('../web/services/temperature.service')
 
 async function initServer () {
   await mqttServer.listen(mqttPort, function () {
@@ -30,11 +30,15 @@ aedes.on('clientDisconnect', function (client) {
   // console.log('Client Disconnected: \x1b[31m' + (client ? client.id : client) + '\x1b[0m', 'to broker', aedes.id)
 })
 
+setTimeout(() => {
+  showTemperature()
+}, 2000)
+
 function onMessage (message, client) {
   switch (message.topic) {
     case '/casa/temperatura':
 
-      functions.saveTemperature(message, client.id)
+      temperatureService.newTemperature(client.id, parseFloat(message.payload.toString()))
 
       break
   }
@@ -48,8 +52,14 @@ function getStatus () {
 }
 
 async function sendMessage (topic, payload) {
-  // aedes.publish({ topic: 'casa/luces/1', payload: params.luz1 })
+  // console.log(topic, payload)
   return await aedes.publish({ topic, payload })
+}
+
+function showTemperature () {
+  temperatureService.getLastTemperature().then((temp) => {
+    sendMessage('/casa/pantalla/temperatura', temp.value)
+  })
 }
 
 module.exports = {
