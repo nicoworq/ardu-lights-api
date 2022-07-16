@@ -32,7 +32,7 @@ aedes.on('clientDisconnect', function (client) {
 
 setTimeout(() => {
   showTemperature()
-}, 2000)
+}, 10000)
 
 function onMessage (message, client) {
   switch (message.topic) {
@@ -52,7 +52,7 @@ function getStatus () {
 }
 
 async function sendMessage (topic, payload) {
-  // console.log(topic, payload)
+  console.log(topic, payload)
   return await aedes.publish({ topic, payload })
 }
 
