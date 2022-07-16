@@ -58,7 +58,7 @@ async function sendMessage (topic, payload) {
 
 function showTemperature () {
   temperatureService.getLastTemperature().then((temp) => {
-    sendMessage('/casa/pantalla/temperatura', temp.value)
+    sendMessage('/casa/pantalla/temperatura', (temp.value).toString())
   })
 }
 
