@@ -32,25 +32,18 @@ aedes.on('clientDisconnect', function (client) {
   // console.log('Client Disconnected: \x1b[31m' + (client ? client.id : client) + '\x1b[0m', 'to broker', aedes.id)
 })
 
-setInterval(() => {
-  showTemperature()
-}, 20000)
-
 function onMessage (message, client) {
   switch (message.topic) {
     case '/casa/temperatura':
       temperatureService.newTemperature(client.id, parseFloat(message.payload.toString()))
-
       break
 
     case '/casa/humedad':
       humidityService.newHumidity(client.id, parseFloat(message.payload.toString()))
-
       break
 
     case '/casa/presion':
       pressureService.newPressure(client.id, parseFloat(message.payload.toString()))
-
       break
   }
 }
@@ -65,12 +58,6 @@ function getStatus () {
 async function sendMessage (topic, payload) {
   console.log(topic, payload)
   return await aedes.publish({ topic, payload })
-}
-
-function showTemperature () {
-  temperatureService.getLastTemperature().then((temp) => {
-    sendMessage('/casa/pantalla/temperatura', (temp.value).toString())
-  })
 }
 
 module.exports = {
