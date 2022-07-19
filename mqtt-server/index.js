@@ -57,7 +57,7 @@ function getStatus () {
 
 async function sendMessage (topic, payload) {
   console.log(topic, payload)
-  return await aedes.publish({ topic, payload })
+  return await aedes.publish({ topic, payload: payload.toString() })
 }
 
 module.exports = {
