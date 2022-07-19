@@ -7,17 +7,17 @@ const temperatureService = require('../web/services/temperature.service')
 // const pressureService = require('../web/services/pressure.service')
 
 function cycleDisplay () {
-  const interval = 25000
-  const awaiter = 7000
+  const interval = 60000
+  const awaiter = 15000
 
   setInterval(async () => {
     showTemperature()
 
     await new Promise(resolve => setTimeout(resolve, awaiter))
 
-    // showCrypto()
+    showCrypto()
 
-    // await new Promise(resolve => setTimeout(resolve, awaiter))
+    await new Promise(resolve => setTimeout(resolve, awaiter))
 
     showTime()
   }, interval)
