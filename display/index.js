@@ -12,9 +12,14 @@ function cycleDisplay () {
 
   setInterval(async () => {
     showTemperature()
+
     await new Promise(resolve => setTimeout(resolve, awaiter))
 
     showCrypto()
+
+    await new Promise(resolve => setTimeout(resolve, awaiter))
+
+    showTime()
   }, interval)
 }
 
@@ -22,10 +27,16 @@ function showCrypto () {
   data.getCryptoCurrencies(['ETH', 'BTC']).then((response) => {
     let message = ''
     response.forEach((crypto) => {
-      message += crypto.symbol + ':$' + crypto.value + ' | '
+      message += crypto.symbol + ':$' + crypto.value + ' >> '
     })
     mqttServer.sendMessage('/casa/pantalla', message)
   })
+}
+
+function showTime () {
+  const now = new Date()
+  const message = now.getHours() + ':' + now.getMinutes()
+  mqttServer.sendMessage('/casa/pantalla/reloj', message)
 }
 
 function showTemperature () {
