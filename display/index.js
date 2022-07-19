@@ -17,7 +17,7 @@ function cycleDisplay () {
 
     showCrypto()
 
-    await new Promise(resolve => setTimeout(resolve, awaiter))
+    await new Promise(resolve => setTimeout(resolve, 20000))
 
     showTime()
   }, interval)
