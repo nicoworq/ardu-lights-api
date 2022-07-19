@@ -9,4 +9,4 @@ const display = require('./display/index')
 
 webServer.initWebServer()
 mqttServer.initServer()
-display.cycleDisplay()
+// display.cycleDisplay()
