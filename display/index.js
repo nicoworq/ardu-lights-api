@@ -7,8 +7,8 @@ const temperatureService = require('../web/services/temperature.service')
 // const pressureService = require('../web/services/pressure.service')
 
 function cycleDisplay () {
-  const interval = 20000
-  const awaiter = 5000
+  const interval = 25000
+  const awaiter = 7000
 
   setInterval(async () => {
     showTemperature()
@@ -35,7 +35,8 @@ function showCrypto () {
 
 function showTime () {
   const now = new Date()
-  const message = now.getHours() + ':' + now.getMinutes()
+  const minutes = now.getMinutes() > 9 ? now.getMinutes() : 0 + now.getMinutes()
+  const message = now.getHours() + ':' + minutes
   mqttServer.sendMessage('/casa/pantalla/reloj', message)
 }
 
