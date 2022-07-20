@@ -3,7 +3,7 @@ const data = require('../data-crawler/index')
 const mqttServer = require('../mqtt-server/index')
 
 const temperatureService = require('../web/services/temperature.service')
-// const humidityService = require('../web/services/humidity.service')
+const humidityService = require('../web/services/humidity.service')
 // const pressureService = require('../web/services/pressure.service')
 
 function cycleDisplay () {
@@ -20,6 +20,10 @@ function cycleDisplay () {
     await new Promise(resolve => setTimeout(resolve, 20000))
 
     showTime()
+
+    await new Promise(resolve => setTimeout(resolve, awaiter))
+
+    showHumidity()
   }, interval)
 }
 
@@ -43,6 +47,12 @@ function showTime () {
 function showTemperature () {
   temperatureService.getLastTemperature().then((temp) => {
     mqttServer.sendMessage('/casa/pantalla/temperatura', (temp.value).toString())
+  })
+}
+
+function showHumidity () {
+  humidityService.getLastHumidity().then((hum) => {
+    mqttServer.sendMessage('/casa/pantalla/temperatura', hum + '%')
   })
 }
 

@@ -16,7 +16,7 @@ function getCryptoCurrencies (simbols) {
 
           Object.entries(parsedData).forEach((key) => {
             const symbol = key[0]
-            const value = key[1].USD
+            const value = Math.trunc(key[1].USD).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 
             cryptoData.push({ symbol, value })
           })
