@@ -52,7 +52,7 @@ function showTemperature () {
 
 function showHumidity () {
   humidityService.getLastHumidity().then((hum) => {
-    mqttServer.sendMessage('/casa/pantalla/temperatura', hum + '%')
+    mqttServer.sendMessage('/casa/pantalla/temperatura', hum.value + '%')
   })
 }
 
