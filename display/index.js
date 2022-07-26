@@ -6,6 +6,8 @@ const temperatureService = require('../web/services/temperature.service')
 const humidityService = require('../web/services/humidity.service')
 // const pressureService = require('../web/services/pressure.service')
 
+const getPixels = require('get-pixels')
+
 function cycleDisplay () {
   const interval = 60000
   const awaiter = 15000
@@ -56,6 +58,43 @@ function showHumidity () {
   })
 }
 
+function showImage () {
+  let colorString
+
+  getPixels('display/pacman.png', function (err, pixels) {
+    if (err) {
+      console.log('Bad image path')
+      return
+    }
+    // console.log(pixels)
+    for (let x = 0; x < pixels.shape[0]; x++) {
+      for (let y = 0; y < pixels.shape[1]; y++) {
+        const r = pixels.get(x, y, 0)
+        const g = pixels.get(x, y, 1)
+        const b = pixels.get(x, y, 2)
+
+        // const rgb = `color: rgb(${r}, ${g}, ${b});`
+
+        colorString += rgbToHex(r, g, b) + ','
+      }
+    }
+    console.log(colorString)
+  })
+}
+
+function componentToHex (c) {
+  if (c === undefined) {
+    return '00'
+  }
+  const hex = c.toString(16)
+  return hex.length === 1 ? '0' + hex : hex
+}
+
+function rgbToHex (r, g, b) {
+  return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b)
+}
+
+showImage()
 module.exports = {
   cycleDisplay
 }
