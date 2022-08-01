@@ -8,36 +8,65 @@ const humidityService = require('../web/services/humidity.service')
 
 const getPixels = require('get-pixels')
 
-function cycleDisplay () {
-  const interval = 60000
-  const awaiter = 15000
+let isRunning = false
+async function cycleDisplay () {
+  if (isRunning) {
+    console.log('ciclle display is running')
+    return
+  }
 
-  setInterval(async () => {
-    showTemperature()
+  isRunning = true
 
-    await new Promise(resolve => setTimeout(resolve, awaiter))
+  console.log('ciclle display')
+  await showCrypto()
 
-    showCrypto()
+  await timer(5000)
 
-    await new Promise(resolve => setTimeout(resolve, 20000))
+  showTime()
 
-    showTime()
+  await timer(5000)
 
-    await new Promise(resolve => setTimeout(resolve, awaiter))
+  showHumidity()
 
-    showHumidity()
-  }, interval)
+  await timer(5000)
+
+  showTemperature()
+
+  isRunning = false
 }
 
-function showCrypto () {
-  data.getCryptoCurrencies(['ETH', 'BTC']).then((response) => {
-    let message = ''
-    response.forEach((crypto) => {
-      message += crypto.symbol + ':$' + crypto.value + ' >> '
+const cryptoStore = {}
+async function showCrypto () {
+  console.log('show crypto')
+
+  const messages = await data.getCryptoCurrencies(['ETH', 'BTC']).then((response) => {
+    const messages = []
+    response.forEach(async (crypto) => {
+      let trend = 'up'
+      if (cryptoStore !== undefined && crypto.symbol in cryptoStore) {
+        // existe
+
+        if (parseFloat(crypto.value) > cryptoStore[crypto.symbol]) {
+          trend = 'up'
+        } else {
+          trend = 'down'
+        }
+      }
+      cryptoStore[crypto.symbol] = crypto.value
+
+      messages.push(crypto.symbol + '|$' + crypto.value + '|' + trend)
     })
-    mqttServer.sendMessage('/casa/pantalla', message)
+    return messages
   })
+
+  for (let i = 0; i < messages.length; i++) {
+    console.log(messages[i])
+    mqttServer.sendMessage('/casa/pantalla/cotizacion', messages[i])
+    await timer(5000)
+  }
 }
+
+const timer = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 function showTime () {
   const now = new Date()
@@ -61,7 +90,7 @@ function showHumidity () {
 function showImage () {
   let colorString
 
-  getPixels('display/pacman.png', function (err, pixels) {
+  getPixels('display/btc.png', function (err, pixels) {
     if (err) {
       console.log('Bad image path')
       return
@@ -94,7 +123,7 @@ function rgbToHex (r, g, b) {
   return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b)
 }
 
-showImage()
 module.exports = {
-  cycleDisplay
+  cycleDisplay,
+  showImage
 }

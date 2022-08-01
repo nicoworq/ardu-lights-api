@@ -7,6 +7,11 @@ const webServer = require('./web/index.js')
 const mqttServer = require('./mqtt-server/index')
 const display = require('./display/index')
 
+const cron = require('node-cron')
+
 webServer.initWebServer()
 mqttServer.initServer()
-// display.cycleDisplay()
+
+cron.schedule('*/45 * * * * *', () => {
+  display.cycleDisplay()
+})
