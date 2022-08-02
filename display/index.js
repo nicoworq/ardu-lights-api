@@ -4,7 +4,7 @@ const mqttServer = require('../mqtt-server/index')
 
 const temperatureService = require('../web/services/temperature.service')
 const humidityService = require('../web/services/humidity.service')
-// const pressureService = require('../web/services/pressure.service')
+const pressureService = require('../web/services/pressure.service')
 
 const getPixels = require('get-pixels')
 
@@ -31,6 +31,10 @@ async function cycleDisplay () {
   await timer(5000)
 
   showTemperature()
+
+  await timer(5000)
+
+  showPressure()
 
   isRunning = false
 }
@@ -78,6 +82,12 @@ function showTime () {
 function showTemperature () {
   temperatureService.getLastTemperature().then((temp) => {
     mqttServer.sendMessage('/casa/pantalla/temperatura', temp.value.toFixed(1))
+  })
+}
+
+function showPressure () {
+  pressureService.getLastPressure().then((press) => {
+    mqttServer.sendMessage('/casa/pantalla/temperatura', press.value.toFixed(1))
   })
 }
 
