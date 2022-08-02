@@ -77,7 +77,7 @@ function showTime () {
 
 function showTemperature () {
   temperatureService.getLastTemperature().then((temp) => {
-    mqttServer.sendMessage('/casa/pantalla/temperatura', (temp.value).toString())
+    mqttServer.sendMessage('/casa/pantalla/temperatura', temp.value.toFixed(1))
   })
 }
 
