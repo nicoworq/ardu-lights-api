@@ -87,7 +87,7 @@ function showTemperature () {
 
 function showPressure () {
   pressureService.getLastPressure().then((press) => {
-    mqttServer.sendMessage('/casa/pantalla/temperatura', press.value.toFixed(1))
+    mqttServer.sendMessage('/casa/pantalla/presion', press.value.toFixed(1))
   })
 }
 
