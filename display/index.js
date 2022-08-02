@@ -70,7 +70,7 @@ const timer = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 function showTime () {
   const now = new Date()
-  const minutes = now.getMinutes() > 9 ? now.getMinutes() : 0 + now.getMinutes()
+  const minutes = now.getMinutes() > 9 ? now.getMinutes() : '0' + now.getMinutes()
   const message = now.getHours() + ':' + minutes
   mqttServer.sendMessage('/casa/pantalla/reloj', message)
 }
