@@ -93,7 +93,7 @@ function showPressure () {
 
 function showHumidity () {
   humidityService.getLastHumidity().then((hum) => {
-    mqttServer.sendMessage('/casa/pantalla/humedad', hum.value.toFixed(0) + '%')
+    mqttServer.sendMessage('/casa/pantalla/humedad', hum.value.toFixed(0))
   })
 }
 
