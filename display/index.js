@@ -11,6 +11,7 @@ const getPixels = require('get-pixels')
 let isRunning = false
 
 const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image']
+
 let currentModule = 0
 
 async function cycleDisplay () {
@@ -123,7 +124,7 @@ function showHumidity () {
 }
 
 function showImage () {
-  let colorString
+  let colorString = ''
 
   getPixels('display/pacman.png', function (err, pixels) {
     if (err) {
@@ -142,7 +143,7 @@ function showImage () {
         colorString += rgbToHex(r, g, b) + ','
       }
     }
-    console.log(colorString)
+    mqttServer.sendMessage('/casa/pantalla/imagen', colorString.slice(0, -1))
   })
 }
 
