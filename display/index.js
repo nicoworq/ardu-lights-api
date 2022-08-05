@@ -9,6 +9,10 @@ const pressureService = require('../web/services/pressure.service')
 const getPixels = require('get-pixels')
 
 let isRunning = false
+
+const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image']
+let currentModule = 0
+
 async function cycleDisplay () {
   if (isRunning) {
     console.log('task is already running')
@@ -16,30 +20,28 @@ async function cycleDisplay () {
   }
 
   isRunning = true
-
-  await showCrypto()
-
-  await timer(5000)
-
-  showTime()
-
-  await timer(5000)
-
-  showHumidity()
-
-  await timer(5000)
-
-  showTemperature()
-
-  await timer(5000)
-
-  showPressure()
-
-  await timer(5000)
-
-  await showWeather()
-
+  switch (availableModules[currentModule]) {
+    case 'crypto':
+      await showCrypto()
+      break
+    case 'time':
+      showTime()
+      break
+    case 'weather':
+      await showWeather()
+      break
+    case 'forecast':
+      await showForecast()
+      break
+    case 'image':
+      await showImage()
+      break
+  }
   isRunning = false
+  currentModule++
+  if (currentModule > availableModules.length - 1) {
+    currentModule = 0
+  }
 }
 
 const cryptoStore = {}
@@ -73,7 +75,7 @@ async function showCrypto () {
 
 const timer = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-async function showWeather () {
+async function showForecast () {
   const days = await data.getWeatherForecast(-32.8833888, -60.6865821)
 
   for (let i = 0; i < days.length; i++) {
@@ -91,6 +93,15 @@ function showTime () {
   const minutes = now.getMinutes() > 9 ? now.getMinutes() : '0' + now.getMinutes()
   const message = now.getHours() + ':' + minutes
   mqttServer.sendMessage('/casa/pantalla/reloj', message)
+}
+
+async function showWeather () {
+  showTemperature()
+  await timer(5000)
+  showHumidity()
+  await timer(5000)
+  showPressure()
+  await timer(5000)
 }
 
 function showTemperature () {
@@ -114,7 +125,7 @@ function showHumidity () {
 function showImage () {
   let colorString
 
-  getPixels('display/btc.png', function (err, pixels) {
+  getPixels('display/pacman.png', function (err, pixels) {
     if (err) {
       console.log('Bad image path')
       return

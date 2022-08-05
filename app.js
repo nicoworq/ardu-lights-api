@@ -12,6 +12,6 @@ const cron = require('node-cron')
 webServer.initWebServer()
 mqttServer.initServer()
 
-cron.schedule('*/45 * * * * *', () => {
+cron.schedule('*/4 * * * * *', () => {
   display.cycleDisplay()
 })
