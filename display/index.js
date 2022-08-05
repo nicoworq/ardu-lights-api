@@ -10,7 +10,7 @@ const getPixels = require('get-pixels')
 
 let isRunning = false
 
-const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image', 'color', 'taxi']
+const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image', 'color', 'taxi', 'farma']
 
 let currentModule = 0
 
@@ -42,6 +42,9 @@ async function cycleDisplay () {
       break
     case 'taxi':
       await showTaxi()
+      break
+    case 'farma':
+      await showFarma()
       break
   }
   isRunning = false
@@ -129,10 +132,10 @@ function showHumidity () {
   })
 }
 
-function showImage () {
+async function showImage () {
   let colorString = ''
 
-  getPixels('display/pacman.png', function (err, pixels) {
+  getPixels('display/pacman.png', async function (err, pixels) {
     if (err) {
       console.log('Bad image path')
       return
@@ -150,6 +153,7 @@ function showImage () {
       }
     }
     mqttServer.sendMessage('/casa/pantalla/imagen', colorString.slice(0, -1))
+    await timer(5000)
   })
 }
 
@@ -164,6 +168,10 @@ async function showColor () {
 
 async function showTaxi () {
   mqttServer.sendMessage('/casa/pantalla/taxi', 'hola')
+}
+
+async function showFarma () {
+  mqttServer.sendMessage('/casa/pantalla/farma', 'hola')
 }
 
 function componentToHex (c) {
