@@ -89,8 +89,8 @@ function getWeatherForecast (lat, long) {
             daysToSend.push({
               date: date[0],
               day: daysOfWeek[dateObject.getDay()],
-              tMin: date[1].tMin[0].toFixed(1),
-              tMax: date[1].tMax[0].toFixed(1),
+              tMin: date[1].tMin[0].toFixed(0),
+              tMax: date[1].tMax[0].toFixed(0),
               precipitation: date[1].precipitation[0]
             })
 
