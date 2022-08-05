@@ -11,13 +11,12 @@ const getPixels = require('get-pixels')
 let isRunning = false
 async function cycleDisplay () {
   if (isRunning) {
-    console.log('ciclle display is running')
+    console.log('task is already running')
     return
   }
 
   isRunning = true
 
-  console.log('ciclle display')
   await showCrypto()
 
   await timer(5000)
@@ -36,13 +35,15 @@ async function cycleDisplay () {
 
   showPressure()
 
+  await timer(5000)
+
+  await showWeather()
+
   isRunning = false
 }
 
 const cryptoStore = {}
 async function showCrypto () {
-  console.log('show crypto')
-
   const messages = await data.getCryptoCurrencies(['ETH', 'BTC']).then((response) => {
     const messages = []
     response.forEach(async (crypto) => {
@@ -71,6 +72,19 @@ async function showCrypto () {
 }
 
 const timer = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+async function showWeather () {
+  const days = await data.getWeatherForecast(-32.8833888, -60.6865821)
+
+  for (let i = 0; i < days.length; i++) {
+    mqttServer.sendMessage('/casa/pantalla/pronostico/temp', `${days[i].day}|${days[i].tMin}|${days[i].tMax}`)
+    await timer(5000)
+    if (days[i].precipitation.probability > 10) {
+      mqttServer.sendMessage('/casa/pantalla/pronostico/precipitacion', `${days[i].day}|${days[i].precipitation.probability}|${days[i].precipitation.time}`)
+      await timer(5000)
+    }
+  }
+}
 
 function showTime () {
   const now = new Date()

@@ -59,8 +59,6 @@ function sendNotification (title, body) {
   }
 
   const req = https.request(options, res => {
-    console.log(`statusCode: ${res.statusCode}`)
-
     res.on('data', d => {
       process.stdout.write(d)
     })
@@ -87,14 +85,11 @@ const server = http.createServer(function (request, response) {
   // console.dir(request.param)
 
   if (request.method === 'POST') {
-    console.log('POST')
     let body = ''
     request.on('data', function (data) {
       body += data
 
       const params = parseBodyParams(body)
-
-      console.log(params)
 
       luz1 = params.luz1
       luz2 = params.luz2
