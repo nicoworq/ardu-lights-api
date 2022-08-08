@@ -92,7 +92,7 @@ async function showForecast () {
     mqttServer.sendMessage('/casa/pantalla/pronostico/temp', `${days[i].day}|${days[i].tMin}|${days[i].tMax}`)
     await timer(5000)
     if (days[i].precipitation.probability > 0.3) {
-      mqttServer.sendMessage('/casa/pantalla/pronostico/precipitacion', `${days[i].day}|${days[i].precipitation.probability}|${days[i].precipitation.time}`)
+      mqttServer.sendMessage('/casa/pantalla/pronostico/precipitacion', `${days[i].day}|${days[i].precipitation.probability * 100}|${days[i].precipitation.time}`)
       await timer(5000)
     }
   }
