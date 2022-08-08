@@ -92,9 +92,14 @@ async function showForecast () {
   for (let i = 0; i < days.length; i++) {
     mqttServer.sendMessage('/casa/pantalla/pronostico/temp', `${days[i].day}|${days[i].tMin}|${days[i].tMax}`)
     await timer(5000)
-    if (days[i].precipitation.probability > 0.3) {
-      mqttServer.sendMessage('/casa/pantalla/pronostico/precipitacion', `${days[i].day}|${days[i].precipitation.probability * 100}|${days[i].precipitation.time}`)
-      await timer(5000)
+
+    if (days[i].precipitation.length) {
+      for (let p = 0; p < days[i].precipitation.length; p++) {
+        const prob = (days[i].precipitation[p].probability * 100).toFixed(0)
+        const time = days[i].precipitation[p].time
+        mqttServer.sendMessage('/casa/pantalla/pronostico/precipitacion', `${days[i].day}|${prob}|${time}`)
+        await timer(5000)
+      }
     }
   }
 }

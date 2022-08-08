@@ -39,8 +39,6 @@ function getWeatherForecast (lat, long) {
 
   const daysOfWeek = ['LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB', 'DOM']
 
-  // https://api.openweathermap.org/data/2.5/forecast?lat=-32.8833888&lon=-60.6865821&appid=bb1b19635789799413663a3d820a3b32&units=metric&lang=es
-
   return new Promise((resolve, reject) => {
     https.get(url, (response) => {
       response.setEncoding('utf8')
@@ -62,8 +60,10 @@ function getWeatherForecast (lat, long) {
               dates[date].precipitation = []
             }
 
-            const precipitationTime = new Date(day.dt * 1000)
-            dates[date].precipitation.push({ probability: day.pop, time: precipitationTime.getHours() + ':' + '0' + precipitationTime.getMinutes() })
+            if (day.pop > 0.5) {
+              const precipitationTime = day.dt_txt.split(' ')[1].slice(0, -3)
+              dates[date].precipitation.push({ probability: day.pop, time: precipitationTime })
+            }
 
             if (dates[date].tMin === undefined) {
               dates[date].tMin = []
@@ -82,7 +82,7 @@ function getWeatherForecast (lat, long) {
             date[1].tMin.sort((a, b) => { return a - b })
             date[1].tMax.sort((a, b) => { return b - a })
 
-            date[1].precipitation.sort((a, b) => { return b.probability - a.probability })
+            // date[1].precipitation.sort((a, b) => { return b.probability - a.probability })
 
             const dateObject = new Date(date[0])
 
@@ -91,7 +91,7 @@ function getWeatherForecast (lat, long) {
               day: daysOfWeek[dateObject.getDay()],
               tMin: date[1].tMin[0].toFixed(0),
               tMax: date[1].tMax[0].toFixed(0),
-              precipitation: date[1].precipitation[0]
+              precipitation: date[1].precipitation
             })
 
             resolve(daysToSend)
