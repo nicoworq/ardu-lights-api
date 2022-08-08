@@ -10,9 +10,8 @@ const getPixels = require('get-pixels')
 
 let isRunning = false
 
-// const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image', 'color', 'taxi', 'farma']
+const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image', 'color', 'taxi', 'farma']
 
-const availableModules = ['forecast']
 let currentModule = 0
 
 async function cycleDisplay () {
