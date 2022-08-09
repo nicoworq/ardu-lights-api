@@ -142,25 +142,28 @@ function showHumidity () {
 
 async function readImage (path) {
   let colorString = ''
-  getPixels('display/pacman.png', async function (err, pixels) {
-    if (err) {
-      console.log('Bad image path')
-      return ''
-    }
-    // console.log(pixels)
-    for (let x = 0; x < pixels.shape[0]; x++) {
-      for (let y = 0; y < pixels.shape[1]; y++) {
-        const r = pixels.get(x, y, 0)
-        const g = pixels.get(x, y, 1)
-        const b = pixels.get(x, y, 2)
 
-        // const rgb = `color: rgb(${r}, ${g}, ${b});`
-
-        colorString += rgbToHex(r, g, b) + ','
+  return new Promise((resolve, reject) => {
+    getPixels(path, async function (err, pixels) {
+      if (err) {
+        console.log('Bad image path')
+        reject(err)
       }
-    }
+      // console.log(pixels)
+      for (let x = 0; x < pixels.shape[0]; x++) {
+        for (let y = 0; y < pixels.shape[1]; y++) {
+          const r = pixels.get(x, y, 0)
+          const g = pixels.get(x, y, 1)
+          const b = pixels.get(x, y, 2)
 
-    return colorString.slice(0, -1)
+          // const rgb = `color: rgb(${r}, ${g}, ${b});`
+
+          colorString += rgbToHex(r, g, b) + ','
+        }
+      }
+
+      resolve(colorString.slice(0, -1))
+    })
   })
 }
 
