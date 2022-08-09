@@ -56,6 +56,8 @@ function getWeatherForecast (lat, long) {
               dates[date] = {}
             }
 
+            // precipitation
+
             if (dates[date].precipitation === undefined) {
               dates[date].precipitation = []
             }
@@ -65,15 +67,25 @@ function getWeatherForecast (lat, long) {
               dates[date].precipitation.push({ probability: day.pop, time: precipitationTime })
             }
 
+            // tMin
             if (dates[date].tMin === undefined) {
               dates[date].tMin = []
             }
             dates[date].tMin.push(day.main.temp_min)
 
+            // tMax
             if (dates[date].tMax === undefined) {
               dates[date].tMax = []
             }
             dates[date].tMax.push(day.main.temp_max)
+
+            // weather
+
+            if (dates[date].weather === undefined) {
+              dates[date].weather = []
+            }
+
+            dates[date].weather.push(day.weather[0].id)
           })
 
           const daysToSend = []
@@ -84,6 +96,10 @@ function getWeatherForecast (lat, long) {
 
             // date[1].precipitation.sort((a, b) => { return b.probability - a.probability })
 
+            // figure out how choose the best weather id
+
+            date[1].weather.sort((a, b) => { return b - a })
+
             const dateObject = new Date(date[0])
 
             daysToSend.push({
@@ -91,7 +107,8 @@ function getWeatherForecast (lat, long) {
               day: daysOfWeek[dateObject.getDay()],
               tMin: date[1].tMin[0].toFixed(0),
               tMax: date[1].tMax[0].toFixed(0),
-              precipitation: date[1].precipitation
+              precipitation: date[1].precipitation,
+              weather: date[1].weather[0]
             })
 
             resolve(daysToSend)

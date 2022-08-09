@@ -89,7 +89,9 @@ async function showForecast () {
   const days = await data.getWeatherForecast(-32.8833888, -60.6865821)
 
   for (let i = 0; i < days.length; i++) {
-    mqttServer.sendMessage('/casa/pantalla/pronostico/temp', `${days[i].day}|${days[i].tMin}|${days[i].tMax}`)
+    const icon = await readImage('display/weather/rain1.png')
+
+    mqttServer.sendMessage('/casa/pantalla/pronostico/dia', `${days[i].day}|${days[i].tMin}|${days[i].tMax}|${icon}`)
     await timer(5000)
 
     if (days[i].precipitation.length) {
@@ -137,13 +139,12 @@ function showHumidity () {
   })
 }
 
-async function showImage () {
+async function readImage (path) {
   let colorString = ''
-
   getPixels('display/pacman.png', async function (err, pixels) {
     if (err) {
       console.log('Bad image path')
-      return
+      return ''
     }
     // console.log(pixels)
     for (let x = 0; x < pixels.shape[0]; x++) {
@@ -157,9 +158,16 @@ async function showImage () {
         colorString += rgbToHex(r, g, b) + ','
       }
     }
-    mqttServer.sendMessage('/casa/pantalla/imagen', colorString.slice(0, -1))
-    await timer(5000)
+
+    return colorString.slice(0, -1)
   })
+}
+
+async function showImage () {
+  const image = await readImage('display/pacman.png')
+
+  mqttServer.sendMessage('/casa/pantalla/imagen', image)
+  await timer(5000)
 }
 
 async function showColor () {
