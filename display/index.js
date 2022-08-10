@@ -90,7 +90,7 @@ async function showForecast () {
   const days = await data.getWeatherForecast(-32.8833888, -60.6865821)
 
   for (let i = 0; i < days.length; i++) {
-    const icon = await readImage('display/weather/thunder.png')
+    const icon = await readImage('display/weather/rain1.png')
 
     mqttServer.sendMessage('/casa/pantalla/pronostico/dia', `${days[i].day}|${days[i].tMin}|${days[i].tMax}|${icon}`)
     await timer(5000)
