@@ -31,6 +31,38 @@ function getCryptoCurrencies (simbols) {
   })
 }
 
+function getMostImportantWeatherId (weatherOptions) {
+  const storm = weatherOptions.filter(option => option.toString().startsWith(2))
+
+  if (storm.length) {
+    return storm[0]
+  }
+
+  const drizzle = weatherOptions.filter(option => option.toString().startsWith(3))
+
+  if (drizzle.length) {
+    return drizzle[0]
+  }
+
+  const rain = weatherOptions.filter(option => option.toString().startsWith(5))
+
+  if (rain.length) {
+    return rain[0]
+  }
+
+  const atmosfere = weatherOptions.filter(option => option.toString().startsWith(7))
+
+  if (atmosfere.length) {
+    return atmosfere[0]
+  }
+
+  const clouds = weatherOptions.filter(option => option.toString().startsWith(8))
+
+  if (clouds.length) {
+    return clouds[0]
+  }
+}
+
 function getWeatherForecast (lat, long) {
   const apiUrl = process.env.WEATHER_URL
   const apiKey = process.env.WEATHER_KEY
@@ -96,10 +128,6 @@ function getWeatherForecast (lat, long) {
 
             // date[1].precipitation.sort((a, b) => { return b.probability - a.probability })
 
-            // figure out how choose the best weather id
-
-            date[1].weather.sort((a, b) => { return b - a })
-
             const dateObject = new Date(date[0])
 
             daysToSend.push({
@@ -108,11 +136,10 @@ function getWeatherForecast (lat, long) {
               tMin: date[1].tMin[0].toFixed(0),
               tMax: date[1].tMax[0].toFixed(0),
               precipitation: date[1].precipitation,
-              weather: date[1].weather[0]
+              weather: getMostImportantWeatherId(date[1].weather)
             })
-
-            resolve(daysToSend)
           })
+          resolve(daysToSend)
         } catch (e) {
           reject(e.message)
           console.error(e)

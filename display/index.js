@@ -86,11 +86,82 @@ async function showCrypto () {
 
 const timer = ms => new Promise(resolve => setTimeout(resolve, ms))
 
+async function getForecastIcon (weatherId) {
+  let fileName = ''
+  switch (weatherId) {
+    case 200:
+    case 201:
+    case 202:
+    case 210:
+    case 211:
+    case 212:
+    case 221:
+    case 230:
+    case 231:
+    case 232:
+      fileName = 'thunder.png'
+      break
+
+    case 300:
+    case 301:
+    case 302:
+      fileName = 'drizzle.png'
+      break
+
+    case 310:
+    case 311:
+    case 312:
+    case 313:
+    case 314:
+    case 321:
+      fileName = 'drizzle1.png'
+      break
+    case 500:
+      fileName = 'rain0.png'
+      break
+    case 501:
+    case 502:
+      fileName = 'rain1.png'
+      break
+    case 503:
+    case 504:
+      fileName = 'rain2.png'
+      break
+
+    case 701:
+    case 711:
+    case 721:
+    case 731:
+    case 741:
+    case 761:
+      fileName = 'atmosfere.png'
+      break
+
+    case 800:
+      fileName = 'sun.png'
+      break
+
+    case 801:
+      fileName = 'cloud1.png'
+      break
+
+    case 802:
+      fileName = 'cloud2.png'
+      break
+
+    case 803:
+    case 804:
+      fileName = 'cloud3.png'
+      break
+  }
+  return await readImage(`display/weather/${fileName}`)
+}
+
 async function showForecast () {
   const days = await data.getWeatherForecast(-32.8833888, -60.6865821)
 
   for (let i = 0; i < days.length; i++) {
-    const icon = await readImage('display/weather/sun.png')
+    const icon = await getForecastIcon(days[i].weather)
 
     mqttServer.sendMessage('/casa/pantalla/pronostico/dia', `${days[i].day}|${days[i].tMin}|${days[i].tMax}|${icon}`)
     await timer(5000)
