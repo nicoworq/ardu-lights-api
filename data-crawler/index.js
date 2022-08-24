@@ -63,6 +63,38 @@ function getMostImportantWeatherId (weatherOptions) {
   }
 }
 
+function getCurrentWeather (lat, long) {
+  const apiUrl = process.env.CURRENT_WEATHER_URL
+  const apiKey = process.env.WEATHER_KEY
+
+  const url = `${apiUrl}?lat=${lat}&lon=${long}&appid=${apiKey}&units=metric&lang=es`
+
+  return new Promise((resolve, reject) => {
+    https.get(url, (response) => {
+      response.setEncoding('utf8')
+      let rawData = ''
+      response.on('data', (chunk) => { rawData += chunk })
+      response.on('end', () => {
+        try {
+          const parsedData = JSON.parse(rawData)
+
+          const dataToSend = {
+            temp: parsedData.main.temp,
+            pressure: parsedData.main.pressure,
+            humidity: parsedData.main.humidity,
+            wind: parsedData.main.wind
+          }
+
+          resolve(dataToSend)
+        } catch (e) {
+          reject(e.message)
+          console.error(e)
+        }
+      })
+    })
+  })
+}
+
 function getWeatherForecast (lat, long) {
   const apiUrl = process.env.WEATHER_URL
   const apiKey = process.env.WEATHER_KEY
@@ -151,5 +183,6 @@ function getWeatherForecast (lat, long) {
 
 module.exports = {
   getCryptoCurrencies,
-  getWeatherForecast
+  getWeatherForecast,
+  getCurrentWeather
 }

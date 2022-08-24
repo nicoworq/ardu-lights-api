@@ -2,15 +2,10 @@
 const data = require('../data-crawler/index')
 const mqttServer = require('../mqtt-server/index')
 
-const temperatureService = require('../web/services/temperature.service')
-const humidityService = require('../web/services/humidity.service')
-const pressureService = require('../web/services/pressure.service')
-
 const getPixels = require('get-pixels')
 
 let isRunning = false
 
-// const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image', 'color', 'taxi', 'farma']
 const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image', 'color', 'taxi', 'farma']
 
 let currentModule = 0
@@ -185,30 +180,26 @@ function showTime () {
 }
 
 async function showWeather () {
-  showTemperature()
+  const currentWeather = await data.getCurrentWeather(-32.8833888, -60.6865821)
+
+  showTemperature(currentWeather)
   await timer(5000)
-  showHumidity()
+  showHumidity(currentWeather)
   await timer(5000)
-  showPressure()
+  showPressure(currentWeather)
   await timer(5000)
 }
 
-function showTemperature () {
-  temperatureService.getLastTemperature().then((temp) => {
-    mqttServer.sendMessage('/casa/pantalla/temperatura', temp.value.toFixed(1))
-  })
+function showTemperature (currentWeather) {
+  mqttServer.sendMessage('/casa/pantalla/temperatura', currentWeather.temp)
 }
 
-function showPressure () {
-  pressureService.getLastPressure().then((press) => {
-    mqttServer.sendMessage('/casa/pantalla/presion', press.value.toFixed(1))
-  })
+function showPressure (currentWeather) {
+  mqttServer.sendMessage('/casa/pantalla/presion', currentWeather.pressure)
 }
 
-function showHumidity () {
-  humidityService.getLastHumidity().then((hum) => {
-    mqttServer.sendMessage('/casa/pantalla/humedad', hum.value.toFixed(0))
-  })
+function showHumidity (currentWeather) {
+  mqttServer.sendMessage('/casa/pantalla/humedad', currentWeather.humidity)
 }
 
 async function readImage (path) {
