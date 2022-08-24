@@ -11,7 +11,7 @@ const getPixels = require('get-pixels')
 let isRunning = false
 
 // const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image', 'color', 'taxi', 'farma']
-const availableModules = ['forecast']
+const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image', 'color', 'taxi', 'farma']
 
 let currentModule = 0
 
