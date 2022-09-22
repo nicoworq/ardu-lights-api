@@ -17,7 +17,7 @@ function getCryptoCurrencies (simbols) {
           Object.entries(parsedData).forEach((key) => {
             const symbol = key[0]
 
-            let value = key[1].USD
+            let value = key[1].USD.toString().replace('.', ',')
 
             if (parseInt(key[1].USD) > 100) {
               value = Math.trunc(key[1].USD).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
