@@ -6,7 +6,8 @@ const getPixels = require('get-pixels')
 
 let isRunning = false
 
-const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image', 'color', 'taxi', 'farma']
+const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image']
+// const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image', 'color', 'taxi', 'farma']
 
 let currentModule = 0
 
@@ -52,7 +53,7 @@ async function cycleDisplay () {
 
 const cryptoStore = {}
 async function showCrypto () {
-  const messages = await data.getCryptoCurrencies(['ETH', 'BTC']).then((response) => {
+  const messages = await data.getCryptoCurrencies(['ETH', 'BTC', 'ETHW']).then((response) => {
     const messages = []
     response.forEach(async (crypto) => {
       let trend = 'up'
