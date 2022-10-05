@@ -160,14 +160,14 @@ async function showForecast () {
     const icon = await getForecastIcon(days[i].weather)
 
     mqttServer.sendMessage('/casa/pantalla/pronostico/dia', `${days[i].day}|${days[i].tMin}|${days[i].tMax}|${icon}`)
-    await timer(5000)
+    await timer(2500)
 
     if (days[i].precipitation.length) {
       for (let p = 0; p < days[i].precipitation.length; p++) {
         const prob = (days[i].precipitation[p].probability * 100).toFixed(0)
         const time = days[i].precipitation[p].time
         mqttServer.sendMessage('/casa/pantalla/pronostico/precipitacion', `${days[i].day}|${prob}|${time}`)
-        await timer(5000)
+        await timer(2000)
       }
     }
   }
