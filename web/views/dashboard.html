@@ -1,12 +1,48 @@
 <html>
+	<head>
+		<title>Dashboard</title>
+	</head>
 
-<head>
-    <title>Dashboard</title>
-    <script src="/frontend.js"></script>
-</head>
+	<body>
+		Dashboard!!
 
-<body>
-    Dashboard!!
-</body>
+		<form action="#" method="post">
+			<input name="action" value="color" type="hidden" />
+			<input type="color" id="colorPicker" name="value" />
+			<button>Send</button>
+		</form>
+	</body>
 
+	<script>
+		// Obtener referencia al elemento de entrada de color
+		const colorPicker = document.getElementById('colorPicker');
+
+		// Escuchar el evento 'input' para detectar cambios en el color seleccionado
+		colorPicker.addEventListener('input', function (event) {
+			const selectedColor = event.target.value;
+			console.log('Color seleccionado:', selectedColor);
+
+			let data = { action: 'color', value: selectedColor };
+
+			fetch('http://localhost:3005/dashboard', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+			})
+				.then((response) => {
+					if (response.ok) {
+						return response.json();
+					}
+					throw new Error('Error en la solicitud POST');
+				})
+				.then((data) => {
+					console.log('Respuesta del servidor:', data);
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+		});
+	</script>
 </html>

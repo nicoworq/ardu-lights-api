@@ -20,7 +20,7 @@ aedes.on('client', function (client) {
 })
 
 aedes.on('publish', async function (packet, client) {
-  console.log('Client \x1b[31m' + (client ? client.id : 'BROKER_' + aedes.id) + '\x1b[0m has published', packet.payload.toString(), 'on', packet.topic, 'to broker', aedes.id)
+  //console.log('Client \x1b[31m' + (client ? client.id : 'BROKER_' + aedes.id) + '\x1b[0m has published', packet.payload.toString(), 'on', packet.topic, 'to broker', aedes.id)
 
   onMessage(packet, client)
 })
@@ -56,7 +56,6 @@ function getStatus () {
 }
 
 async function sendMessage (topic, payload) {
-  console.log(topic, payload)
   return await aedes.publish({ topic, payload: payload.toString() })
 }
 

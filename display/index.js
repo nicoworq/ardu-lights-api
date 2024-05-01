@@ -1,6 +1,9 @@
 
 const data = require('../data-crawler/index')
 const mqttServer = require('../mqtt-server/index')
+const cronBuilder = require('node-cron')
+
+let displayCron = null;
 
 const getPixels = require('get-pixels')
 
@@ -11,9 +14,26 @@ const availableModules = ['crypto', 'time', 'weather', 'forecast', 'image']
 
 let currentModule = 0
 
+function initCycle(){
+	if(displayCron === null){
+		displayCron = cronBuilder.schedule('*/4 * * * * *', () => {
+			cycleDisplay();
+		  })
+	}
+	
+}
+async function stopCycle(){
+	if(displayCron!== null){
+		await displayCron.stop();
+		displayCron = null;
+	}
+	
+}
+
+
+
 async function cycleDisplay () {
   if (isRunning) {
-    console.log('task is already running')
     return
   }
 
@@ -74,7 +94,6 @@ async function showCrypto () {
   })
 
   for (let i = 0; i < messages.length; i++) {
-    console.log(messages[i])
     mqttServer.sendMessage('/casa/pantalla/cotizacion', messages[i])
     await timer(5000)
   }
@@ -268,5 +287,7 @@ function rgbToHex (r, g, b) {
 
 module.exports = {
   cycleDisplay,
-  showImage
+  showImage,
+  initCycle,
+  stopCycle
 }
