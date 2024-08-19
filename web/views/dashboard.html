@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<title>Dashboard</title>
 	</head>
 
@@ -12,10 +13,34 @@
 			<button>Send</button>
 		</form>
 
-		<button id="red">Rojo</button>
-		<button id="yellow">Amarillo</button>
-		<button id="green">Verde</button>
+		<button id="red" class="btn-semaforo">Rojo</button>
+		<button id="yellow" class="btn-semaforo">Amarillo</button>
+		<button id="green" class="btn-semaforo">Verde</button>
 	</body>
+	<style>
+		.btn-semaforo{
+			background: white;
+    color: white;
+    border: 3px solid;
+    border-radius: 3px;
+    padding: 20px 30px;
+    font-size: 20px;
+    width: 100%;
+    margin-bottom: 20px;
+		}
+		#red{
+			border-color: red;
+			background-color: red;
+		}
+		#yellow{
+			border-color: yellow;
+			background-color: yellow;
+		}
+		#green{
+			border-color: green;
+			background-color: green;
+		}
+	</style>
 
 	<script>
 
