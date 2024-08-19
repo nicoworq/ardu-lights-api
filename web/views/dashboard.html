@@ -6,7 +6,7 @@
 	<body>
 		Dashboard!!
 
-		<form action="#" method="post">
+		<form action="/dashboard" method="post" id="form-ardu">
 			<input name="action" value="color" type="hidden" />
 			<input type="color" id="colorPicker" name="value" />
 			<button>Send</button>
@@ -14,6 +14,17 @@
 	</body>
 
 	<script>
+
+		const form = document.getElementById('form-ardu');
+
+		form.addEventListener('submit',(event)=>{
+			event.preventDefault()
+			const formData = new FormData(form);
+			console.log(JSON.stringify(formData))
+
+		});
+
+
 		// Obtener referencia al elemento de entrada de color
 		const colorPicker = document.getElementById('colorPicker');
 
@@ -24,7 +35,7 @@
 
 			let data = { action: 'color', value: selectedColor };
 
-			fetch('http://localhost:3005/dashboard', {
+			fetch('/dashboard', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
