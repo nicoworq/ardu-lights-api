@@ -5,22 +5,28 @@
 	</head>
 
 	<body>
-		Dashboard!!
+		 
+		<h1>Astor</h1>
+		<h3>Semáforo</h3>
 
+		<button id="red" class="btn-semaforo">Rojo</button>
+		<button id="yellow" class="btn-semaforo">Amarillo</button>
+		<button id="green" class="btn-semaforo">Verde</button>
+
+		<br><br><br><br><br><br>
 		<form action="/dashboard" method="post" id="form-ardu">
 			<input name="action" value="color" type="hidden" />
 			<input type="color" id="colorPicker" name="value" />
 			<button>Send</button>
 		</form>
-
-		<button id="red" class="btn-semaforo">Rojo</button>
-		<button id="yellow" class="btn-semaforo">Amarillo</button>
-		<button id="green" class="btn-semaforo">Verde</button>
 	</body>
 	<style>
+		h1,h2,h3{
+			text-align: center;
+		}
 		.btn-semaforo{
 			background: white;
-    color: white;
+    color: #0a0a0a;;
     border: 3px solid;
     border-radius: 3px;
     padding: 20px 30px;
